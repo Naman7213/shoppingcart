@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Shopping Cart</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        /* Add your custom styles here */
+        .cart-item {
+            border: 1px solid #dee2e6;
+            border-radius: 0.25rem;
+            margin-bottom: 20px;
+            padding: 15px;
+        }
+
+        .cart-item img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .quantity {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .remove-button {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<!--<div class="container mt-5">-->
+<!--    <h1>Your Shopping Cart</h1>-->
+
+<!--    <div class="row">-->
+<!--        &lt;!&ndash; Left column for items &ndash;&gt;-->
+<!--        <div class="col-md-8">-->
+<!--            &lt;!&ndash; Iterate over cart items &ndash;&gt;-->
+<!--            <div th:each="product, iterStat : ${cart}" class="cart-item">-->
+<!--                &lt;!&ndash; Image &ndash;&gt;-->
+<!--                <img th:src="${product.imgUrl}" alt="Product Image"/>-->
+<!--                &lt;!&ndash; Product details &ndash;&gt;-->
+<!--                <h4 th:text="${product.productName}"></h4>-->
+<!--                <p th:text="${product.description}"></p>-->
+<!--                <p>Category: <span th:text="${product.category}"></span></p>-->
+<!--                <p>Price: $<span th:text="${product.price}"></span></p>-->
+
+
+<!--                &lt;!&ndash; Quantity update form &ndash;&gt;-->
+<!--                <form th:action="@{'/updateQuantity/' + ${product.id}}" method="post">-->
+<!--                    <div class="quantity">-->
+<!--                        <input type="number" name="quantity" value="${product.quantity}" min="1" max="${product.quantity}" required />-->
+<!--                        <button type="submit" class="btn btn-info update-button">Update Quantity</button>-->
+<!--                    </div>-->
+<!--                </form>-->
+
+<!--                &lt;!&ndash; Remove Item form &ndash;&gt;-->
+<!--                <form th:action="@{'/removeItem/' + ${product.id}}" method="get">-->
+<!--                    <button type="submit" class="btn btn-danger remove-button">Remove Item</button>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Right column for summary &ndash;&gt;-->
+<!--        <div class="col-md-4">-->
+<!--            &lt;!&ndash; Total items and price &ndash;&gt;-->
+<!--            <h2>Summary</h2>-->
+<!--            <p>Total Items: <span th:text="${size}"></span></p>-->
+<!--            <p>Total Price: $<span th:text="${total}"></span></p>-->
+
+<!--            <form class="needs-validation" novalidate th:action="@{/goToCheckout}" method="get">-->
+<!--                <button class="btn btn-success" type="submit">Checkout</button>-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<div class="container mt-5">
+    <h1>Your Shopping Cart</h1>
+    <!-- Error message div -->
+    <div id="errorMessage" class="alert alert-danger mt-3" style="display: none;"></div>
+
+    <div class="row">
+        <!-- Left column for items -->
+        <div class="col-md-8">
+            <!-- Iterate over unique cart items -->
+            <div th:each="uniqueProduct : ${uniqueProducts}" class="cart-item">
+                <!-- Image -->
+                <img th:src="${uniqueProduct.imgUrl}" alt="Product Image"/>
+                <!-- Product details -->
+                <h4 th:text="${uniqueProduct.productName}"></h4>
+                <p th:text="${uniqueProduct.description}"></p>
+                <p>Category: <span th:text="${uniqueProduct.category}"></span></p>
+                <p>Price: $<span th:text="${uniqueProduct.price}"></span></p>
+
+                <!-- Quantity update form -->
+                <form th:action="@{'/updateQuantity/' + ${uniqueProduct.id}}" method="post">
+                    <div class="quantity">
+                        <input type="number" name="quantity" value="${uniqueProduct.quantity}" min="1" max="${uniqueProduct.quantity}" required />
+                        <button type="submit" class="btn btn-info update-button">Update Quantity</button>
+                    </div>
+                </form>
+
+                <!-- Remove Item form -->
+                <form th:action="@{'/removeItem/' + ${uniqueProduct.id}}" method="get">
+                    <button type="submit" class="btn btn-danger remove-button">Remove Item</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Right column for summary -->
+        <div class="col-md-4">
+            <!-- Total items and price -->
+            <h2>Summary</h2>
+            <p>Total Items: <span th:text="${size}"></span></p>
+            <p>Total Price: $<span th:text="${total}"></span></p>
+
+            <form class="needs-validation" novalidate th:action="@{/goToCheckout}" method="get">
+                <button class="btn btn-success" type="submit">Checkout</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- Include Bootstrap JS and any other scripts if needed -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+<!-- Add this JavaScript block at the end of your cart.html file -->
+<script>
+    $(document).ready(function () {
+        /* Use Thymeleaf's th:text to directly print the value into the JavaScript code */
+        var errorMessage = "[[${errorMessage}]]";
+        console.log("Error Message:", errorMessage);
+
+        if (errorMessage !== '') {
+            displayErrorMessage(errorMessage);
+        }
+
+        /* Function to display error message and hide after 5 seconds */
+        function displayErrorMessage(message) {
+            var errorDiv = $('#errorMessage');
+            errorDiv.text(message).show();
+            setTimeout(function () {
+                errorDiv.fadeOut('slow');
+            }, 5000);
+        }
+    });
+</script>
+
+</body>
+
+</html>

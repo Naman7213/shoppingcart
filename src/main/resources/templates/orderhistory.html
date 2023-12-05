@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order History</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+</head>
+<body>
+
+<nav class="navbar navbar-dark bg-dark navbar-expand-md fixed-top">
+    <!-- Your navbar code here -->
+</nav>
+
+<br/>
+<br/>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Order History</h1>
+            <!-- Search Form -->
+            <form th:action="@{/search-orders}" method="get">
+                <label for="startDate">Start Date:</label>
+                <input type="date" id="startDate" name="startDate" required>
+
+                <label for="endDate">End Date:</label>
+                <input type="date" id="endDate" name="endDate" required>
+
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+            <a th:href="@{/order-history}" class="btn btn-success">Reset</a>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Product Name</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Order Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <th:block th:if="${not #lists.isEmpty(orders)}">
+                    <tr th:each="order : ${orders}">
+                        <td th:text="${order._id}"></td>
+                        <td th:text="${order.productName}"></td>
+                        <td th:text="${order.category}"></td>
+                        <td th:text="${order.price}"></td>
+                        <td th:text="${#dates.format(order.orderDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                    </tr>
+                    </th:block>
+                    <th:block th:if="${#lists.isEmpty(orders)}">
+                        <tr>
+                            <td colspan="5">No orders found.</td>
+                        </tr>
+                    </th:block>
+                </tbody>
+            </table>
+            <!-- Pagination Controls -->
+            <nav>
+                <ul class="pagination">
+                    <li class="page-item" th:if="${currentPage > 0}">
+                        <a class="page-link" th:href="@{/order-history(page=0, size=${totalPages})}">&laquo;&laquo;</a>
+                    </li>
+                    <li class="page-item" th:if="${currentPage > 0}">
+                        <a class="page-link" th:href="@{/order-history(page=${currentPage - 1}, size=${totalPages})}">&laquo;</a>
+                    </li>
+                    <li class="page-item" th:each="page, stat : ${#numbers.sequence(0, totalPages-1)}" th:classappend="${currentPage == stat.index} ? 'active'">
+                        <a class="page-link" th:href="@{/order-history(page=${stat.index}, size=${totalPages})}" th:text="${stat.index + 1}"></a>
+                    </li>
+                    <li class="page-item" th:if="${currentPage < totalPages - 1}">
+                        <a class="page-link" th:href="@{/order-history(page=${currentPage + 1}, size=${totalPages})}">&raquo;</a>
+                    </li>
+                    <li class="page-item" th:if="${currentPage < totalPages - 1}">
+                        <a class="page-link" th:href="@{/order-history(page=${totalPages - 1}, size=${totalPages})}">&raquo;&raquo;</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>
